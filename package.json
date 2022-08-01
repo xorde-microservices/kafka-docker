@@ -1,0 +1,10 @@
+{
+	"name": "kafka-docker",
+	"description": "Kafka Docker ",
+	"scripts": {
+		"kafka": "docker compose -f docker/kafka.yml --env-file .env up",
+		"kafka.scram": "docker compose -f docker/kafka.scram.yml --env-file .env up",
+		"kafka-ui": "docker compose -f docker/kafka-ui.yml --env-file .env up",
+		"kafka-ui.browser": "x-www-browser \"localhost:$(./scripts/dotenv.sh .env KAFKA_ADMIN_PORT)\""
+	}
+}

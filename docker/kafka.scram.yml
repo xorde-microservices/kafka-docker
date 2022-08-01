@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  ################ KAFKA-SASL ################
+  zookeeper:
+    extends:
+      service: zookeeper
+      file: kafka.yml
+    environment:
+      - KAFKA_OPTS =
+
+  kafka1:
+    extends:
+      service: kafka1
+      file: kafka.yml
+    environment:
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=DOCKER_NET:PLAINTEXT,EXTERNAL_NET:SASL_SSL
+      - KAFKA_OPTS=-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf bin/kafka-server-start etc/kafka/server.properties
+
+  kafka2:
+    extends:
+      service: kafka2
+      file: kafka.yml
+    environment:
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=DOCKER_NET:PLAINTEXT,EXTERNAL_NET:SASL_SSL
+      - KAFKA_OPTS=-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf bin/kafka-server-start etc/kafka/server.properties

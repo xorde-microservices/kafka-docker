@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+  ################ KAFKA ################
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.4
+    ports:
+      - ${KAFKA_ZOOKEEPER_PORT}:${KAFKA_ZOOKEEPER_PORT}
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=${KAFKA_ZOOKEEPER_PORT}
+      - ZOOKEEPER_TICK_TIME=2000
+
+  kafka1:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka1
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - ${KAFKA_BROKER0_PORT}:${KAFKA_BROKER0_PORT}
+    environment:
+      - KAFKA_BROKER_ID=0
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${KAFKA_ZOOKEEPER_PORT}
+      - KAFKA_ADVERTISED_LISTENERS=DOCKER_NET://kafka1:9093,EXTERNAL_NET://localhost:${KAFKA_BROKER0_PORT}
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=DOCKER_NET:PLAINTEXT,EXTERNAL_NET:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=DOCKER_NET
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - JMX_PORT=9997
+      - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka1 -Dcom.sun.management.jmxremote.rmi.port=9997
+
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka2
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - ${KAFKA_BROKER1_PORT}:${KAFKA_BROKER1_PORT}
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${KAFKA_ZOOKEEPER_PORT}
+      - KAFKA_ADVERTISED_LISTENERS=DOCKER_NET://kafka2:9093,EXTERNAL_NET://localhost:${KAFKA_BROKER1_PORT}
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=DOCKER_NET:PLAINTEXT,EXTERNAL_NET:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=DOCKER_NET
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - JMX_PORT=9997
+      - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka1 -Dcom.sun.management.jmxremote.rmi.port=9997
+

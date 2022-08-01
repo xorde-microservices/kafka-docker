@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  ################ KAFKA-UI ################
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - ${KAFKA_ADMIN_PORT}:8080
+    depends_on:
+      - zookeeper
+      - kafka0
+    environment:
+      - KAFKA_CLUSTERS_0_NAME="local"
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka0:9093
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:${KAFKA_ZOOKEEPER_PORT}
+      - KAFKA_CLUSTERS_0_JMXPORT=9997
+      # AUTH_TYPE = "LOGIN_FORM"
+      - AUTH_TYPE
+      - SPRING_SECURITY_USER_NAME
+      - SPRING_SECURITY_USER_PASSWORD
