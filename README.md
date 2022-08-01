@@ -20,7 +20,7 @@ This repository contains scripts and configuration files required to deploy Apac
 Run docker compose:
 
 ```shell
-docker compose -f kafka.yml up -d
+docker compose -f docker/kafka.yml up -d
 ```
 
 # Client Configurations
